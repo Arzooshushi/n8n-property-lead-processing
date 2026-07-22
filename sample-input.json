@@ -1,0 +1,54 @@
+sample-input.json
+{
+  "source": "Property Portal",
+  "campaign_id": "CMP-2026-07",
+  "leads": [
+    {
+      "lead_id": "L-001",
+      "name": "  Ali Khan  ",
+      "email": " ALI@EMAIL.COM ",
+      "phone": "0300-1234567",
+      "budget": "5000000",
+      "verified": "true",
+      "company": null,
+      "services": [
+        "Buy",
+        "Mortgage"
+      ],
+      "address": {
+        "city": "Lahore",
+        "country": "Pakistan"
+      }
+    },
+    {
+      "lead_id": "L-002",
+      "name": " Sara Ahmed ",
+      "email": "SARA@EMAIL.COM",
+      "phone": "+92 311 1234567",
+      "budget": "2500000",
+      "verified": "false",
+      "company": "ABC Builders",
+      "services": [
+        "Rent"
+      ],
+      "address": {
+        "city": "Karachi",
+        "country": "Pakistan"
+      }
+    },
+    {
+      "lead_id": "L-003",
+      "name": "Ahmed Raza",
+      "email": "",
+      "phone": "",
+      "budget": "7000000",
+      "verified": "true",
+      "company": null,
+      "services": [],
+      "address": {
+        "city": "Islamabad",
+        "country": "Pakistan"
+      }
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+{
+  "name": "property-lead-processing-workflow.json",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "8dfa56e6-a0e4-44eb-b9aa-c6a4473b4c65",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        -112
+      ],
+      "id": "8da158ff-acb7-487c-acfc-4164d6f2f55b",
+      "name": "Webhook",
+      "webhookId": "8dfa56e6-a0e4-44eb-b9aa-c6a4473b4c65"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=leads",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "source, campaign_id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -208
+      ],
+      "id": "d427b9ea-7ec9-460a-a7d4-19e430782b7f",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fa43d218-1cb6-431d-b2ec-69b00d4964df",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f73bb51f-d867-4995-b0d0-0fd675c7efce",
+              "leftValue": "={{ $json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "73212dc6-ff26-4703-aeb7-c18bf2eeee94",
+              "leftValue": "={{ $json.budget_valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        464,
+        -208
+      ],
+      "id": "21446dd4-0b92-415b-bb42-91ca508a8f8c",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        976,
+        -288
+      ],
+      "id": "0eb85e0b-4e2f-4fa7-94f4-c619e0f83e9f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"processing_status\": \"Rejected\",\n  \"error_reason\": \"{{ !$json.name?.trim() ? 'Name is missing' : !$json.phone?.trim() ? 'Phone is missing' : !$json.budget_valid ? 'Budget is invalid' : 'Invalid lead data' }}\"\n}",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        320,
+        32
+      ],
+      "id": "1ac370a5-f66f-4bdf-90fd-5dded0dcf9b2",
+      "name": "Prepare Invalid Lead"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"source\": \"Property Portal\",\n  \"campaign_id\": \"CMP-2026-07\",\n  \"leads\": [\n    {\n      \"lead_id\": \"L-001\",\n      \"name\": \"  Ali Khan  \",\n      \"email\": \" ALI@EMAIL.COM \",\n      \"phone\": \"0300-1234567\",\n      \"budget\": \"5000000\",\n      \"verified\": \"true\",\n      \"company\": null,\n      \"services\": [\"Buy\", \"Mortgage\"],\n      \"address\": {\n        \"city\": \"Lahore\",\n        \"country\": \"Pakistan\"\n      }\n    },\n    {\n      \"lead_id\": \"L-002\",\n      \"name\": \" Sara Ahmed \",\n      \"email\": \"SARA@EMAIL.COM\",\n      \"phone\": \"+92 311 1234567\",\n      \"budget\": \"2500000\",\n      \"verified\": \"false\",\n      \"company\": \"ABC Builders\",\n      \"services\": [\"Rent\"],\n      \"address\": {\n        \"city\": \"Karachi\",\n        \"country\": \"Pakistan\"\n      }\n    },\n    {\n      \"lead_id\": \"L-003\",\n      \"name\": \"Ahmed Raza\",\n      \"email\": \"\",\n      \"phone\": \"\",\n      \"budget\": \"7000000\",\n      \"verified\": \"true\",\n      \"company\": null,\n      \"services\": [],\n      \"address\": {\n        \"city\": \"Islamabad\",\n        \"country\": \"Pakistan\"\n      }\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        -144
+      ],
+      "id": "29faf661-2547-4c8d-85c2-0babfc2543b5",
+      "name": "Mock Property Portal Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "45def420-8b87-4894-873a-69d26c3a2c53",
+              "name": "lead_id",
+              "value": "={{ $json.leads.lead_id }}",
+              "type": "string"
+            },
+            {
+              "id": "eafefe3b-43f8-4ceb-8f59-440cd33ac13d",
+              "name": "name",
+              "value": "={{ $json.leads.name.trim()}}",
+              "type": "string"
+            },
+            {
+              "id": "7b2acc60-70a9-4914-8200-4e13e47743cf",
+              "name": "email",
+              "value": "={{ $json.leads.email.trim().toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "19adebf2-68ef-40ef-9114-3525f19437ac",
+              "name": "phone",
+              "value": "={{ $json.leads.phone.trim().replace(/[^0-9]/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "1328901a-bddb-4697-9433-036ca72afede",
+              "name": "budget",
+              "value": "={{ Number.isFinite(Number($json.leads.budget)) ? Number($json.leads.budget) : null }}",
+              "type": "number"
+            },
+            {
+              "id": "a08e52a3-7bcf-41a9-bfe5-d487c286e736",
+              "name": "verified",
+              "value": "={{ String($json.leads.verified).trim().toLowerCase() === 'true' }}",
+              "type": "boolean"
+            },
+            {
+              "id": "7f74256e-f5c4-4324-b9b9-30746b13b9d8",
+              "name": "company",
+              "value": "={{ $json.leads.company?.trim() || 'Individual' }}",
+              "type": "string"
+            },
+            {
+              "id": "ca07f37e-5c73-4fdd-aa68-a4c97f1eeffb",
+              "name": "services",
+              "value": "={{ $json.leads.services }}",
+              "type": "array"
+            },
+            {
+              "id": "34b687ed-22c0-4686-aebe-cde7a8323726",
+              "name": "services_count",
+              "value": "={{ $json.leads.services.length }}",
+              "type": "number"
+            },
+            {
+              "id": "f5938f2f-bb3e-4b54-84dc-2d32088f4244",
+              "name": "primary_service",
+              "value": "={{ $json.leads.services[0] ?? 'No service' }}",
+              "type": "string"
+            },
+            {
+              "id": "d4e1bd1e-a98b-4103-af08-daf9d8f1d350",
+              "name": "city",
+              "value": "={{ $json.leads.address.city }}",
+              "type": "string"
+            },
+            {
+              "id": "3680375c-ba7e-4375-a814-917c1fe3406b",
+              "name": "source",
+              "value": "={{ $json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "3e461e43-58d1-4e2d-92bc-08dfc08d98b9",
+              "name": "status",
+              "value": "New lead",
+              "type": "string"
+            },
+            {
+              "id": "df032142-f888-44a9-8a52-eb5e8bc686b7",
+              "name": "budget_valid",
+              "value": "={{ Number.isFinite(Number($json.leads.budget)) }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -208
+      ],
+      "id": "c01803b2-b564-4208-9e30-aa5ef5c8bf9a",
+      "name": "Clean and Standardize Leads"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "611c666b-0c23-4e30-a53b-1a03f8956a27",
+              "leftValue": "={{ $json.budget >= 3000000 }}",
+              "rightValue": 3000000,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        -256
+      ],
+      "id": "594cdefc-7c34-4137-8259-a29f145dd5f4",
+      "name": "Check High-Value Lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2dc317a2-e292-4ee3-9dee-48bdf238c8bd",
+              "name": "lead_priority",
+              "value": "high value",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        816,
+        -400
+      ],
+      "id": "b7e5e6e9-fd3e-49c4-82bc-0bebc9ddaf22",
+      "name": "Mark High Value"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d5aff48a-4d38-4286-aca0-59a773f05ec9",
+              "name": "lead_priority",
+              "value": "Normal",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        -112
+      ],
+      "id": "dcea8b79-ee17-4d21-b382-f525d80671d9",
+      "name": "Mark Normal"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"contact\": {\n    \"lead_id\": \"{{$json.lead_id}}\",\n    \"name\": \"{{$json.name}}\",\n    \"email\": \"{{$json.email}}\",\n    \"phone\": \"{{$json.phone}}\"\n  },\n  \"qualification\": {\n    \"budget\": {{$json.budget}},\n    \"verified\": {{$json.verified}},\n    \"priority\": \"{{$json.lead_priority}}\"\n  },\n  \"preferences\": {\n    \"services\": {{$json.services}},\n    \"primary_service\": \"{{$json.primary_service}}\",\n    \"city\": \"{{$json.city}}\"\n  },\n  \"business\": {\n    \"company\": \"{{$json.company}}\",\n    \"source\": \"{{$json.source}}\",\n    \"status\": \"{{$json.status}}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        -288
+      ],
+      "id": "539539bf-12cc-4e14-be11-b96cc750c608",
+      "name": "Build CRM Payload"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"lead_id\": \"{{$json.lead_id}}\",\n  \"name\": \"{{$json.name}}\",\n  \"email\": \"{{$json.email}}\",\n  \"phone\": \"{{$json.phone}}\",\n  \"status\": \"{{$json.processing_status}}\",\n  \"reason\": \"{{$json.error_reason}}\",\n  \"source\": \"{{$json.source}}\",\n  \"logged_at\": \"{{$now.toISO()}}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        528,
+        32
+      ],
+      "id": "45c2c200-928b-46e7-81d1-f433e35ce395",
+      "name": "Build Invalid Lead Log"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "arzoowaris2026.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, br",
+            "accept-language": "en-US,en;q=0.9",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "59.103.125.178",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "PK",
+            "cf-ray": "a1f4d8edae6170ec-MRS",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "cookie": "_ga=GA1.1.1113948313.1784232448; _fbp=fb.1.1784232447956.320621689416391419; _gcl_au=1.1.1059029096.1784232984; rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX1%2FEuCINRTxAocOs%2F2QSrkiIzgRf%2BMT%2Fs%2BE%3D; _ga_0SC4FF2FH9=GS2.1.s1784744594$o6$g0$t1784744598$j56$l0$h0; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX188%2BSynppT0aYZcK%2FhB8sNcCtu4GIUs2Xy5Gpv8zEvB7x1cNJrOzm3sWmZcyquQNoBYWhvrxd4%2BNA%3D%3D; rl_user_id=RudderEncrypt%3AU2FsdGVkX19qnQ6soIGKrlvFDCOeYAM3tt2bohvNRz6cB5x7HhbMxeqWLUzI8vbv9tNxr2U6NYrhXsBiZ8sDRL5VMDPSqiFx4Os5v3DKLSSthvAl6hW3J05%2BVyKwDpbxVEqsqpWpkIXWuOC7klrSPeB%2BvCNKeqI%2B1khwxjzm6gc%3D; rl_trait=RudderEncrypt%3AU2FsdGVkX19TJBZxZsPSpcpovinr0h9wAQXcaaQyEW2vA6QgZuD9SvoEvlqsXhBMh6MGcM43rk4SOvaDDEAxtMuaMSzyzWbChplr7Tgl%2FDGExeVlO6CTrhJ82jLQZnLyVYF8%2FnsqjnSaTzZjupjZ6vQAqR%2BYhM%2F%2BFHLsqR69%2F1oacRa39w0eWYl7%2FmJWxCx01IQtbxhJSl3smmczWrvNNMl87RjAxUyHG0VlhfDklJI%3D; n8n_anonymous_id=8d993dd7-17dd-4eef-9c8c-2f7af5c32637; ph_phc_kMstNfAgBcBkWSh6KdsgN09heqqNe5VNmalHP1Ni9Q4_posthog=%7B%22%24device_id%22%3A%22c7c70f032a38f3201146641831148224397440956543d8abc9a69c0486da5b14%23f153e53c-e797-4f90-865a-e38ba07ce398%22%2C%22distinct_id%22%3A%22c7c70f032a38f3201146641831148224397440956543d8abc9a69c0486da5b14%23f153e53c-e797-4f90-865a-e38ba07ce398%22%2C%22%24sesid%22%3A%5B1784748484946%2C%22019f8b11-732e-733b-b018-8ce33e5c0880%22%2C1784744604459%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22%24direct%22%2C%22u%22%3A%22https%3A%2F%2Farzoowaris2026.app.n8n.cloud%2F%22%7D%2C%22%24user_state%22%3A%22anonymous%22%7D; rl_session=RudderEncrypt%3AU2FsdGVkX1%2BaONHYwe2VY5ieVWrvKyIeR%2BAExnPpVPzxO08KEfv7XNFradeNJ9V3vj2hCDJ2AjEG%2B4XMqbOclBxVzFpNP5zcu3SP%2BWAdy0L6%2BI2TS9v1KHrV0M8KqY5NdG0GlMYoe8Gm4hwpctzP%2FQ%3D%3D",
+            "if-none-match": "W/\"22-6OS7cK0FzqnV2NeDHdOSGS1bVUs\"",
+            "priority": "u=0, i",
+            "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "59.103.125.178, 162.158.23.90",
+            "x-forwarded-host": "arzoowaris2026.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-swc-35-5b998d79bc-hmn2z",
+            "x-is-trusted": "yes",
+            "x-real-ip": "59.103.125.178"
+          },
+          "params": {},
+          "query": {
+            "name": "",
+            "email": "ahmed@email.com",
+            "phone": "03001234567",
+            "budget": "7000000",
+            "verified": "true",
+            "company": "ABC Builders",
+            "service": "Buy",
+            "city": "Islamabad",
+            "source": "Property Portal"
+          },
+          "body": {},
+          "webhookUrl": "https://arzoowaris2026.app.n8n.cloud/webhook-test/8dfa56e6-a0e4-44eb-b9aa-c6a4473b4c65",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Mock Property Portal Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Clean and Standardize Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Check High-Value Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Invalid Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Build CRM Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Invalid Lead": {
+      "main": [
+        [
+          {
+            "node": "Build Invalid Lead Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Property Portal Data": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean and Standardize Leads": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check High-Value Lead": {
+      "main": [
+        [
+          {
+            "node": "Mark High Value",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark High Value": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Normal": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7c073c22-e7ed-4389-a6b3-7f47c61e4fc9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c7c70f032a38f3201146641831148224397440956543d8abc9a69c0486da5b14"
+  },
+  "nodeGroups": [],
+  "id": "WjZ5MqXo2wJkalXf",
+  "tags": []
+}

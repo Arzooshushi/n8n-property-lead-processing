@@ -1,0 +1,53 @@
+[
+  {
+    "contact": {
+      "lead_id": "L-001",
+      "name": "Ali Khan",
+      "email": "ali@email.com",
+      "phone": "03001234567"
+    },
+    "qualification": {
+      "budget": 5000000,
+      "verified": true,
+      "priority": "High Value"
+    },
+    "preferences": {
+      "services": [
+        "Buy",
+        "Mortgage"
+      ],
+      "primary_service": "Buy",
+      "city": "Lahore"
+    },
+    "business": {
+      "company": "Individual",
+      "source": "Property Portal",
+      "status": "New Lead"
+    }
+  },
+  {
+    "contact": {
+      "lead_id": "L-002",
+      "name": "Sara Ahmed",
+      "email": "sara@email.com",
+      "phone": "923111234567"
+    },
+    "qualification": {
+      "budget": 2500000,
+      "verified": false,
+      "priority": "Normal"
+    },
+    "preferences": {
+      "services": [
+        "Rent"
+      ],
+      "primary_service": "Rent",
+      "city": "Karachi"
+    },
+    "business": {
+      "company": "ABC Builders",
+      "source": "Property Portal",
+      "status": "New Lead"
+    }
+  }
+]
