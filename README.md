@@ -46,7 +46,7 @@ Lead Log       \              /
 
 ## Workflow Screenshot
 
-![Workflow Overview](screenshots/01-workflow-overview.png)
+![Workflow Overview](screenshots/01-workflow-overview)
 
 ## Core Features
 
