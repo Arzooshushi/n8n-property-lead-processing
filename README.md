@@ -48,7 +48,7 @@ Lead Log       \               /
 
 The workflow receives one batch containing multiple lead objects. It separates each lead, cleans the data, validates required fields, routes valid leads according to budget, and sends invalid leads to a structured error-log path.
 
-![Workflow Overview](Screenshots/01-workflow-overview.png)
+![Workflow Overview](./01-workflow-overview.png)
 
 ## Data Cleaning and Standardization
 
@@ -65,7 +65,7 @@ The workflow performs the following transformations:
 - Extracts the primary service
 - Extracts city from a nested address object
 
-![Cleaned Lead Data](Screenshots/02-cleaned-lead-data.png)
+![Cleaned Lead Data](./02-cleaned-lead-data.png)
 
 ## Validation and Routing
 
@@ -79,7 +79,7 @@ A lead is accepted when:
 
 Invalid leads are sent to a separate rejection and logging path.
 
-![Validation Routing](Screenshots/03-validation-routing.png)
+![Validation Routing](./03-validation-routing.png)
 
 ## Lead Priority Classification
 
@@ -101,8 +101,7 @@ Valid leads are converted from flat records into a structured nested JSON payloa
 - Property preferences
 - Business metadata
 
-![CRM Payload](Screenshots/04-crm-payload.png)
-
+![CRM Payload](./04-crm-payload.png)
 Example structure:
 
 ```json
@@ -141,8 +140,7 @@ Rejected leads receive:
 - Original source
 - Processing timestamp
 
-![Invalid Lead Log](Screenshots/05-invalid-lead-log.png)
-
+![Invalid Lead Log](./05-invalid-lead-log.png)
 Example:
 
 ```json
